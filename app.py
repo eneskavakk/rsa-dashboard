@@ -271,190 +271,402 @@ def main():
         initial_sidebar_state="expanded"
     )
 
+    # Google Fonts import
+    st.markdown('<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">', unsafe_allow_html=True)
+
     # Özel CSS stilleri
     st.markdown("""
     <style>
-        /* Ana tema renkleri */
-        :root {
-            --primary: #6C63FF;
-            --secondary: #FF6584;
-            --accent: #00D9A6;
-            --bg-dark: #0E1117;
-            --card-bg: #1A1D23;
-            --text-primary: #E2E8F0;
-            --text-secondary: #CBD5E0;
+        /* ===== ANIMASYONLAR ===== */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
-        /* Başlık stili */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(108, 99, 255, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(108, 99, 255, 0.4); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(108, 99, 255, 0.3); }
+            50% { border-color: rgba(108, 99, 255, 0.6); }
+        }
+
+        /* ===== GLOBAL FONT ===== */
+        html, body, [class*="css"] {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        }
+        code, pre, .stCode {
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+
+        /* ===== ANA BAŞLIK ===== */
         .main-title {
-            background: linear-gradient(135deg, #6C63FF 0%, #FF6584 50%, #00D9A6 100%);
+            background: linear-gradient(135deg, #818CF8 0%, #A78BFA 25%, #F472B6 50%, #34D399 75%, #818CF8 100%);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2.5rem;
-            font-weight: 800;
+            background-clip: text;
+            font-size: 2.8rem;
+            font-weight: 900;
             text-align: center;
-            margin-bottom: 0.5rem;
-            font-family: 'Inter', sans-serif;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
+            animation: gradientShift 6s ease infinite;
         }
         
         .subtitle {
             text-align: center;
-            color: #9CA3AF !important;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
+            color: #A0AECB !important;
+            font-size: 1.05rem;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
         }
-        
-        /* Bilgi kartları */
+
+        /* ===== BİLGİ KARTLARI ===== */
         .info-card {
-            background: linear-gradient(135deg, #1A1D23 0%, #262A33 100%);
-            border: 1px solid #2D3748;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 0.75rem 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            color: #E2E8F0 !important;
+            background: linear-gradient(145deg, rgba(35, 40, 55, 0.95) 0%, rgba(44, 50, 65, 0.92) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            border-radius: 16px;
+            padding: 1.5rem 1.8rem;
+            margin: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            color: #F1F5F9 !important;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.5s ease-out;
+            line-height: 1.75;
+        }
+        .info-card:hover {
+            border-color: rgba(99, 102, 241, 0.35);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(108, 99, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
         }
         .info-card strong {
-            color: #F1F5F9 !important;
+            color: #F8FAFC !important;
+            font-weight: 700;
         }
         .info-card code {
             color: #A5B4FC !important;
-            background: rgba(99, 102, 241, 0.15) !important;
-            padding: 2px 6px;
-            border-radius: 4px;
+            background: rgba(99, 102, 241, 0.12) !important;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            font-weight: 500;
+            border: 1px solid rgba(99, 102, 241, 0.15);
         }
         .info-card em {
             color: #CBD5E0 !important;
+            font-style: italic;
         }
-        
+
+        /* ===== ANAHTAR KARTLARI ===== */
         .key-card {
-            background: linear-gradient(135deg, #1E2530 0%, #1A2332 100%);
-            border: 1px solid #2D4A7A;
-            border-radius: 12px;
-            padding: 1.2rem;
-            margin: 0.5rem 0;
-            color: #E2E8F0 !important;
+            background: linear-gradient(145deg, rgba(28, 35, 52, 0.95) 0%, rgba(34, 42, 62, 0.92) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.22);
+            border-radius: 14px;
+            padding: 1.2rem 1.4rem;
+            margin: 0.6rem 0;
+            color: #F1F5F9 !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .key-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), 0 0 15px rgba(59, 130, 246, 0.08);
+            transform: translateY(-1px);
         }
         .key-card strong {
             color: #F1F5F9 !important;
+            font-weight: 700;
         }
         .key-card code {
             color: #93C5FD !important;
-            background: rgba(59, 130, 246, 0.15) !important;
-            padding: 2px 6px;
-            border-radius: 4px;
+            background: rgba(59, 130, 246, 0.1) !important;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            border: 1px solid rgba(59, 130, 246, 0.15);
         }
-        
-        /* Badge stilleri */
+
+        /* ===== BADGE STİLLERİ ===== */
         .badge-public {
-            background: linear-gradient(135deg, #059669, #10B981);
-            padding: 4px 12px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+            padding: 5px 16px;
+            border-radius: 24px;
             color: white !important;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.8rem;
             display: inline-block;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
         }
         
         .badge-private {
-            background: linear-gradient(135deg, #DC2626, #EF4444);
-            padding: 4px 12px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            padding: 5px 16px;
+            border-radius: 24px;
             color: white !important;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.8rem;
             display: inline-block;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
-        
-        /* Matematiksel formül kutusu */
+
+        /* ===== MATEMATİKSEL FORMÜL KUTUSU ===== */
         .math-box {
-            background: #1A1D23;
-            border-left: 4px solid #6C63FF;
-            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, rgba(32, 38, 52, 0.95) 0%, rgba(38, 44, 60, 0.92) 100%);
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, #818CF8, #6C63FF) 1;
+            padding: 1.1rem 1.6rem;
             margin: 1rem 0;
-            border-radius: 0 8px 8px 0;
-            color: #E2E8F0 !important;
+            border-radius: 0 12px 12px 0;
+            color: #F1F5F9 !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        .math-box:hover {
+            box-shadow: 0 4px 20px rgba(108, 99, 255, 0.15);
         }
         .math-box strong {
             color: #F1F5F9 !important;
+            font-weight: 700;
         }
-        
-        /* Güvenlik seviye göstergesi */
-        .security-low { color: #EF4444 !important; font-weight: bold; }
-        .security-medium { color: #F59E0B !important; font-weight: bold; }
-        .security-high { color: #10B981 !important; font-weight: bold; }
-        
-        /* Sidebar stili */
+
+        /* ===== GÜVENLİK SEVİYE GÖSTERGESİ ===== */
+        .security-low { 
+            color: #F87171 !important; 
+            font-weight: 700; 
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.3);
+        }
+        .security-medium { 
+            color: #FBBF24 !important; 
+            font-weight: 700; 
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+        }
+        .security-high { 
+            color: #34D399 !important; 
+            font-weight: 700; 
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.3);
+        }
+
+        /* ===== SIDEBAR ===== */
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #0E1117 0%, #1A1D23 100%);
+            background: linear-gradient(180deg, #151928 0%, #1A1F32 50%, #1E2338 100%);
+            border-right: 1px solid rgba(99, 102, 241, 0.12);
         }
-        
-        /* Metrik kartları */
+        [data-testid="stSidebar"] [data-testid="stMarkdown"] h2 {
+            color: #F1F5F9 !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stMarkdown"] h3 {
+            color: #F1F5F9 !important;
+        }
+
+        /* ===== METRİK KARTLARI ===== */
         [data-testid="stMetric"] {
-            background: linear-gradient(135deg, #1A1D23, #262A33);
-            border: 1px solid #2D3748;
-            border-radius: 10px;
-            padding: 12px;
+            background: linear-gradient(145deg, rgba(32, 38, 52, 0.92), rgba(44, 50, 65, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
-        
-        /* Sekme stilleri */
+        [data-testid="stMetric"]:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== SEKME STİLLERİ ===== */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 8px;
+            gap: 4px;
+            background: rgba(20, 24, 36, 0.6);
+            border-radius: 12px;
+            padding: 4px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
         }
         .stTabs [data-baseweb="tab"] {
-            border-radius: 8px;
-            padding: 10px 24px;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #94A3B8 !important;
         }
-        
-        /* Tablo stili */
+        .stTabs [data-baseweb="tab"]:hover {
+            background: rgba(99, 102, 241, 0.08);
+            color: #E2E8F0 !important;
+        }
+        .stTabs [aria-selected="true"] {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%) !important;
+            color: #A5B4FC !important;
+            border-bottom: 2px solid #818CF8 !important;
+        }
+
+        /* ===== TABLO STİLİ ===== */
         .crypto-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            border-radius: 10px;
+            border-radius: 14px;
             overflow: hidden;
             margin: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(99, 102, 241, 0.12);
         }
         .crypto-table th {
-            background: #2D3748;
-            color: #E2E8F0 !important;
-            padding: 10px 16px;
-            font-weight: 600;
+            background: linear-gradient(135deg, #232A3E 0%, #2E3650 100%);
+            color: #F1F5F9 !important;
+            padding: 14px 18px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
         }
         .crypto-table td {
-            background: #1A1D23;
-            color: #CBD5E0 !important;
-            padding: 8px 16px;
-            border-top: 1px solid #2D3748;
+            background: rgba(30, 35, 50, 0.85);
+            color: #E2E8F0 !important;
+            padding: 12px 18px;
+            border-top: 1px solid rgba(55, 65, 85, 0.5);
+            transition: all 0.2s ease;
+            font-size: 0.92rem;
+        }
+        .crypto-table tr:hover td {
+            background: rgba(99, 102, 241, 0.06);
         }
         .crypto-table td code {
             color: #A5B4FC !important;
-            background: rgba(99, 102, 241, 0.15) !important;
-            padding: 2px 6px;
-            border-radius: 4px;
+            background: rgba(99, 102, 241, 0.12) !important;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            border: 1px solid rgba(99, 102, 241, 0.12);
         }
         .crypto-table td strong {
             color: #F1F5F9 !important;
+            font-weight: 600;
         }
-        
-        /* Footer stili */
+
+        /* ===== BUTON STİLLERİ ===== */
+        .stButton > button[kind="primary"] {
+            background: linear-gradient(135deg, #6C63FF 0%, #818CF8 100%) !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.02em !important;
+            box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .stButton > button[kind="primary"]:hover {
+            box-shadow: 0 6px 24px rgba(108, 99, 255, 0.45) !important;
+            transform: translateY(-2px) !important;
+        }
+        .stButton > button[kind="secondary"] {
+            border: 1px solid rgba(99, 102, 241, 0.3) !important;
+            border-radius: 12px !important;
+            background: transparent !important;
+            color: #A5B4FC !important;
+            transition: all 0.3s ease !important;
+        }
+        .stButton > button[kind="secondary"]:hover {
+            background: rgba(99, 102, 241, 0.1) !important;
+            border-color: rgba(99, 102, 241, 0.5) !important;
+        }
+
+        /* ===== INPUT ALANLARI ===== */
+        .stTextArea textarea, .stTextInput input, .stNumberInput input {
+            background: rgba(20, 24, 36, 0.85) !important;
+            border: 1px solid rgba(99, 102, 241, 0.22) !important;
+            border-radius: 12px !important;
+            color: #F1F5F9 !important;
+            transition: all 0.3s ease !important;
+        }
+        .stTextArea textarea:focus, .stTextInput input:focus, .stNumberInput input:focus {
+            border-color: rgba(99, 102, 241, 0.5) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .stProgress > div > div {
+            background: linear-gradient(90deg, #818CF8, #A78BFA, #C4B5FD) !important;
+            border-radius: 8px !important;
+        }
+
+        /* ===== DIVIDER ===== */
+        hr {
+            border: none !important;
+            height: 1px !important;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent) !important;
+            margin: 2rem 0 !important;
+        }
+
+        /* ===== FOOTER ===== */
         .footer-text {
             text-align: center;
             color: #6B7280 !important;
-            padding: 1rem;
+            padding: 2rem 1rem;
         }
         .footer-text p {
             color: #6B7280 !important;
+            font-size: 0.9rem;
         }
         .footer-text code {
             color: #A5B4FC !important;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(20, 24, 36, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.5);
+        }
+               
+        /* ===== GENEL ===== */
+        .block-container {
+            padding-top: 2rem !important;
+        }
+        
+        /* Success/Error/Warning/Info kutularının stilini iyileştir */
+        .stAlert {
+            border-radius: 12px !important;
         }
     </style>
     """, unsafe_allow_html=True)
 
     # Başlık
-    st.markdown('<p class="main-title">🔐 RSA Şifreleme Laboratuvarı</p>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">İnteraktif RSA Algoritması Eğitim ve Güvenlik Analiz Aracı</p>', unsafe_allow_html=True)
+    st.markdown('''
+    <div style="text-align: center; margin-bottom: 0.5rem;">
+        <div style="width: 60px; height: 4px; background: linear-gradient(90deg, #818CF8, #F472B6, #34D399); border-radius: 2px; margin: 0 auto 1.5rem;"></div>
+        <p class="main-title">🔐 RSA Şifreleme Laboratuvarı</p>
+        <p class="subtitle">İnteraktif RSA Algoritması Eğitim ve Güvenlik Analiz Aracı</p>
+    </div>
+    ''', unsafe_allow_html=True)
 
     # =========================================================================
     # SIDEBAR: ANAHTAR AYARLARI
@@ -602,10 +814,11 @@ def main():
     keys_ready = all(k in st.session_state for k in ['n', 'e', 'd', 'phi_n'])
 
     # Sekmeler
-    tab1, tab2, tab3 = st.tabs([
+    tab1, tab2, tab3, tab4 = st.tabs([
         "🔒 Şifreleme & Çözme",
         "🛡️ Güvenlik Analizi",
-        "📚 Matematiksel Arka Plan"
+        "📚 Matematiksel Arka Plan",
+        "💡 RSA Nedir?"
     ])
 
     # =====================================================================
@@ -901,8 +1114,8 @@ def main():
                             gridcolor='#2D3748',
                             type='log'  # Logaritmik eksen
                         ),
-                        plot_bgcolor='#0E1117',
-                        paper_bgcolor='#0E1117',
+                        plot_bgcolor='#141824',
+                        paper_bgcolor='#141824',
                         font=dict(color='#E2E8F0'),
                         legend=dict(
                             bgcolor='rgba(26, 29, 35, 0.8)',
@@ -1186,13 +1399,265 @@ def main():
                 else:
                     st.warning(f"ASCII değeri ({m_ex}) modül n ({n_cur}) değerinden büyük. Daha büyük asal sayılar seçin.")
 
+    # =====================================================================
+    # SEKME 4: RSA NEDİR? (SON KULLANICI İÇİN)
+    # =====================================================================
+    with tab4:
+        st.markdown("### 💡 RSA Şifreleme — Herkes İçin Anlaşılır Rehber")
+
+        # Giriş
+        st.markdown("""
+        <div class="info-card">
+            <strong>🤔 RSA Nedir?</strong><br><br>
+            RSA, internet üzerindeki iletişimi güvenli hale getiren bir <strong>şifreleme yöntemidir</strong>.
+            Adını, 1977 yılında onu bulan üç bilim insanından almıştır:
+            <strong>R</strong>on Rivest, Adi <strong>S</strong>hamir ve Leonard <strong>A</strong>dleman.<br><br>
+            Günlük hayatınızda farkında olmadan RSA kullanıyorsunuz:
+            web sitelerinde alışveriş yaparken, e-postalarınızı okurken ve
+            bankacılık işlemlerinizde verileriniz RSA ile korunuyor.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Günlük Hayat Analojisi
+        st.markdown("#### 📬 Günlük Hayattan Bir Örnek")
+
+        col_analogy1, col_analogy2 = st.columns(2)
+
+        with col_analogy1:
+            st.markdown("""
+            <div class="info-card">
+                <strong>📮 Posta Kutusu Benzetmesi</strong><br><br>
+                RSA'yı bir <strong>posta kutusu</strong> gibi düşünün:<br><br>
+                🔓 <strong>Açık Anahtar</strong> = Posta kutusunun adresi<br>
+                → Herkes bu adrese mektup atabilir.<br><br>
+                🔐 <strong>Özel Anahtar</strong> = Posta kutusunun anahtarı<br>
+                → Sadece siz mektupları okuyabilirsiniz.<br><br>
+                Herkes kutuya mektup atabilir ama sadece <strong>anahtarı olan kişi</strong>
+                mektupları açıp okuyabilir!
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_analogy2:
+            st.markdown("""
+            <div class="info-card">
+                <strong>🔒 Asma Kilit Benzetmesi</strong><br><br>
+                Arkadaşınıza güvenli mesaj göndermek istiyorsunuz:<br><br>
+                1️⃣ Arkadaşınız size <strong>açık bir asma kilit</strong> gönderir<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(Bu kilit = Açık Anahtar)<br><br>
+                2️⃣ Siz mesajınızı bir kutuya koyup <strong>kilidi kapatırsınız</strong><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(Bu işlem = Şifreleme)<br><br>
+                3️⃣ Arkadaşınız <strong>kendi anahtarı</strong> ile kilidi açar<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(Bu anahtar = Özel Anahtar)<br><br>
+                Kilidi herkes kapatabilir, ama <strong>sadece anahtarın sahibi açabilir!</strong>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Nerelerde Kullanılıyor
+        st.markdown("#### 🌍 RSA Nerelerde Kullanılıyor?")
+
+        col_use1, col_use2, col_use3 = st.columns(3)
+
+        with col_use1:
+            st.markdown("""
+            <div class="info-card" style="text-align:center;">
+                <span style="font-size:2.5rem;">🛒</span><br><br>
+                <strong>Online Alışveriş</strong><br><br>
+                Kredi kartı bilgileriniz<br>
+                RSA ile şifrelenerek<br>
+                güvenle iletilir.<br><br>
+                <span style="color:#34D399;">🔒 HTTPS bağlantısı</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_use2:
+            st.markdown("""
+            <div class="info-card" style="text-align:center;">
+                <span style="font-size:2.5rem;">🏦</span><br><br>
+                <strong>İnternet Bankacılığı</strong><br><br>
+                Hesap bilgileriniz ve<br>
+                para transferleriniz<br>
+                RSA ile korunur.<br><br>
+                <span style="color:#34D399;">🔒 SSL/TLS protokolü</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_use3:
+            st.markdown("""
+            <div class="info-card" style="text-align:center;">
+                <span style="font-size:2.5rem;">✉️</span><br><br>
+                <strong>E-posta Güvenliği</strong><br><br>
+                E-postalarınızın<br>
+                şifrelenmesi ve dijital<br>
+                imzalanması.<br><br>
+                <span style="color:#34D399;">🔒 PGP / S/MIME</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Nasıl Çalışır - Basit
+        st.markdown("#### ⚙️ RSA Nasıl Çalışır? (Basitçe)")
+
+        st.markdown("""
+        <div class="info-card">
+            <strong>📋 4 Basit Adımda RSA:</strong><br><br>
+            <table class="crypto-table">
+                <tr><th>Adım</th><th>Ne Yapılır?</th><th>Benzetme</th></tr>
+                <tr>
+                    <td><strong>1. Anahtar Üretme</strong></td>
+                    <td>İki büyük gizli sayı seçilir ve bunlardan açık ve özel anahtar oluşturulur</td>
+                    <td>🏭 Kilit fabrikasında eşsiz bir kilit-anahtar çifti üretilir</td>
+                </tr>
+                <tr>
+                    <td><strong>2. Anahtar Paylaşma</strong></td>
+                    <td>Açık anahtar herkese paylaşılır, özel anahtar gizli tutulur</td>
+                    <td>📢 Kilidi herkese dağıtırsınız, anahtarı cebinizde saklarsınız</td>
+                </tr>
+                <tr>
+                    <td><strong>3. Şifreleme</strong></td>
+                    <td>Gönderici, alıcının açık anahtarı ile mesajı şifreler</td>
+                    <td>📦 Mesajı kutuya koyup kilidi kapatırsınız</td>
+                </tr>
+                <tr>
+                    <td><strong>4. Çözme</strong></td>
+                    <td>Alıcı, kendi özel anahtarı ile mesajı çözer</td>
+                    <td>🔑 Kutuyu kendi anahtarınızla açarsınız</td>
+                </tr>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Güvenlik İpuçları
+        st.markdown("#### 🛡️ Dijital Güvenlik İpuçları")
+
+        col_tip1, col_tip2 = st.columns(2)
+
+        with col_tip1:
+            st.markdown("""
+            <div class="info-card">
+                <strong>✅ Yapmanız Gerekenler:</strong><br><br>
+                🟢 Web sitelerinde <strong>HTTPS</strong> (🔒) simgesini kontrol edin<br><br>
+                🟢 Güçlü ve <strong>benzersiz şifreler</strong> kullanın<br><br>
+                🟢 <strong>İki faktörlü doğrulama</strong> (2FA) aktifleştirin<br><br>
+                🟢 Yazılımlarınızı ve tarayıcınızı <strong>güncel tutun</strong><br><br>
+                🟢 Güvenilir <strong>VPN</strong> kullanarak bağlantınızı koruyun
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_tip2:
+            st.markdown("""
+            <div class="info-card">
+                <strong>❌ Kaçınmanız Gerekenler:</strong><br><br>
+                🔴 HTTP olan sitelere <strong>kişisel bilgi girmeyin</strong><br><br>
+                🔴 Şüpheli e-postalardaki <strong>linklere tıklamayın</strong><br><br>
+                🔴 Herkese açık Wi-Fi'da <strong>bankacılık yapmayın</strong><br><br>
+                🔴 Aynı şifreyi <strong>birden fazla yerde kullanmayın</strong><br><br>
+                🔴 Bilinmeyen kaynaklardan <strong>dosya indirmeyin</strong>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Dijital İmza
+        st.markdown("#### ✍️ Dijital İmza Nedir?")
+
+        st.markdown("""
+        <div class="info-card">
+            <strong>📝 RSA ile Dijital İmza</strong><br><br>
+            RSA sadece mesajları şifrelemek için değil, aynı zamanda <strong>dijital imza</strong> oluşturmak
+            için de kullanılır. Dijital imza, bir belgenin:<br><br>
+            ✅ <strong>Kimden geldiğini</strong> kanıtlar (Kimlik Doğrulama)<br>
+            ✅ <strong>Değiştirilmediğini</strong> garanti eder (Bütünlük)<br>
+            ✅ Gönderenin mesajı <strong>inkar edememesini</strong> sağlar (İnkar Edilemezlik)<br><br>
+            <em>Dijital imza, gerçek hayattaki ıslak imzanın dijital karşılığıdır.
+            Farkı, taklit edilmesinin neredeyse imkansız olmasıdır!</em>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Sıkça Sorulan Sorular
+        st.markdown("#### ❓ Sıkça Sorulan Sorular")
+
+        with st.expander("RSA kırılabilir mi?"):
+            st.markdown("""
+            <div class="info-card">
+                Teorik olarak evet, pratik olarak <strong>hayır</strong> — yeterince uzun anahtar
+                kullanıldığında. Günümüzde <strong>2048 bit</strong> ve üzeri anahtarlar kullanıldığında,
+                mevcut en güçlü süper bilgisayarlar bile RSA'yı kırmak için
+                <strong>evrenin yaşından daha uzun süreye</strong> ihtiyaç duyar.<br><br>
+                Ancak gelecekte <strong>kuantum bilgisayarlar</strong> gelişirse, RSA tehdit altına
+                girebilir. Bu yüzden bilim insanları şimdiden "kuantum-dayanıklı"
+                şifreleme yöntemleri üzerinde çalışıyor.
+            </div>
+            """, unsafe_allow_html=True)
+
+        with st.expander("RSA yavaş mı?"):
+            st.markdown("""
+            <div class="info-card">
+                Evet, RSA nispeten <strong>yavaş bir şifreleme yöntemidir</strong>. Bu yüzden pratikte
+                şu şekilde kullanılır:<br><br>
+                1️⃣ RSA ile kısa bir <strong>simetrik anahtar</strong> güvenle paylaşılır<br>
+                2️⃣ Asıl veri bu simetrik anahtar ile <strong>AES gibi hızlı</strong> bir yöntemle şifrelenir<br><br>
+                Bu yaklaşıma <strong>hibrit şifreleme</strong> denir ve internet güvenliğinin temelini oluşturur.
+            </div>
+            """, unsafe_allow_html=True)
+
+        with st.expander("Açık anahtarımı paylaşmak güvenli mi?"):
+            st.markdown("""
+            <div class="info-card">
+                <strong>Evet, kesinlikle güvenlidir!</strong> RSA'nın tüm güzelliği burada yatar.<br><br>
+                Açık anahtarınızı tüm dünya ile paylaşabilirsiniz. Birisi açık anahtarınızla
+                bir mesajı şifrelerse, <strong>sadece siz</strong> özel anahtarınızla çözebilirsiniz.<br><br>
+                Açık anahtardan özel anahtarı elde etmek, matematiksel olarak
+                <strong>pratik olarak imkansızdır</strong>.
+            </div>
+            """, unsafe_allow_html=True)
+
+        with st.expander("RSA ile AES arasındaki fark nedir?"):
+            st.markdown("""
+            <div class="info-card">
+                <table class="crypto-table">
+                    <tr><th>Özellik</th><th>RSA</th><th>AES</th></tr>
+                    <tr><td><strong>Tür</strong></td><td>Asimetrik (2 anahtar)</td><td>Simetrik (1 anahtar)</td></tr>
+                    <tr><td><strong>Hız</strong></td><td>Yavaş</td><td>Çok hızlı</td></tr>
+                    <tr><td><strong>Kullanım</strong></td><td>Anahtar değişimi, dijital imza</td><td>Büyük veri şifreleme</td></tr>
+                    <tr><td><strong>Anahtar Paylaşımı</strong></td><td>Güvenli (açık anahtar paylaşılır)</td><td>Zor (anahtarın güvenle iletilmesi gerekir)</td></tr>
+                </table>
+                <br>
+                <em>Pratikte ikisi birlikte kullanılır: RSA ile AES anahtarı güvenle paylaşılır,
+                veri ise AES ile şifrelenir.</em>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with st.expander("Kuantum bilgisayarlar RSA'yı kırabilir mi?"):
+            st.markdown("""
+            <div class="info-card">
+                <strong>⚠️ Bu ciddi bir tehdit olabilir.</strong><br><br>
+                Kuantum bilgisayarlar, <strong>Shor Algoritması</strong> ile büyük sayıları çarpanlarına
+                çok hızlı ayırabilir. Bu, RSA'nın güvenlik temelini doğrudan tehdit eder.<br><br>
+                Ancak henüz yeterince güçlü kuantum bilgisayarlar mevcut değil.
+                Bilim insanları bu tehdit için şimdiden <strong>"Post-Kuantum Kriptografi"</strong>
+                adı verilen yeni şifreleme yöntemleri geliştirmektedir.<br><br>
+                <strong>NIST</strong> (ABD Ulusal Standartlar ve Teknoloji Enstitüsü) 2024 yılında
+                kuantum-dayanıklı şifreleme standartlarını yayınlamıştır.
+            </div>
+            """, unsafe_allow_html=True)
+
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; color: #6B7280; padding: 1rem;">
-        <p>🔐 RSA Şifreleme Laboratuvarı | Eğitim Amaçlı</p>
-        <p style="font-size: 0.8rem;">
-            Bu uygulama eğitim amaçlıdır. Gerçek şifreleme için <code>cryptography</code> 
+    <div style="text-align: center; padding: 2rem 1rem;">
+        <div style="width: 40px; height: 3px; background: linear-gradient(90deg, #818CF8, #F472B6); border-radius: 2px; margin: 0 auto 1.2rem;"></div>
+        <p style="color: #9CA3AF; font-size: 0.95rem; font-weight: 500; margin-bottom: 0.5rem;">🔐 RSA Şifreleme Laboratuvarı</p>
+        <p style="color: #6B7280; font-size: 0.8rem;">
+            Bu uygulama eğitim amaçlıdır. Gerçek şifreleme için <code style="color: #A5B4FC; background: rgba(99,102,241,0.1); padding: 2px 6px; border-radius: 4px;">cryptography</code> 
             gibi güvenilir kütüphaneler kullanın.
         </p>
     </div>
